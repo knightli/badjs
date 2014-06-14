@@ -1,0 +1,21 @@
+{
+  "name": "badjs",
+  "version": "0.0.1",
+  "description": "A log solution",
+  "keywords": [
+    "badjs",
+    "log"
+  ],
+  "repository": "git://github.com/knight/badjs.git",
+  "author": "Daniel Yang <miniflycn@gmail.com>",
+  "main": "index",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {
+    "connect": "*",
+    "axon": "*",
+    "user-agent-parser": "*"
+  },
+  "license": "MIT"
+}

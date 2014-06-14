@@ -3,36 +3,27 @@ module.exports = function () {
   console.log('accpeter startup');
 
   var connect = require('connect')
+    , ua = require('user-agent-parser')
     , axon = require('axon')
     , rep = axon.socket('rep')
-    , buffer = [];
+    , BufferPush = require('./buffer-push')
+    // create a push buffer
+    , buffer = new BufferPush(100000);
 
   rep.connect(3001);
 
   rep.on('message', function (reply) {
-    reply(buffer);
-    buffer.length = 0;
+    reply(buffer.toString());
+    buffer.reset();
   });
 
-  function _makeParam(str) {
-    var kvs = str.split('&')
-      , param = {};
-    kvs.forEach(function (kv) {
-      kv = kv.split('=');
-      param[kv[0]] = kv[1];
-    });
-    return param;
-  }
-
   var app = connect()
-              .use(function (req, res) {
-                var begin, param;
+              .use('/badjs', connect.query())
+              .use('/badjs', function (req, res) {
+                // parse user agent
+                // console.log(ua(req.headers['user-agent']));
 
-                param = (begin = req.url.indexOf('?') + 1) ?
-                  _makeParam(req.url.substring(begin)) :
-                  {};
-
-                buffer.push(param);
+                buffer.push(+new Date + ' ' + req.query.level + ' ' + req.query.msg + '\n');
 
                 res.writeHead(204, { 'Content-Type': 'image/jpeg' });
                 res.statusCode = 204;
