@@ -8,12 +8,17 @@ module.exports = function () {
 
   req.bind(3001);
 
-  setInterval(function () {
+  function write() {
     req.send(function (res) {
       if (res) {
-        fs.appendFile('./badjs.log', res);
+        fs.appendFile('./badjs.log', res, function (err) {
+          setTimeout(write, 20);
+        });
+      } else {
+        setTimeout(write, 20);
       }
     });
-  }, 5000);
+  }
+  write();
   
 }();
