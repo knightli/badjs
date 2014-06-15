@@ -14,7 +14,7 @@ module.exports = function () {
 
   rep.on('message', function (reply) {
     reply(buffer.toString());
-    buffer.reset();
+    buffer.length = 0;
   });
 
   var app = connect()
