@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+echo
+node $1 &
+pid=$!
+
+sleep 2
+
+wrk 'http://localhost:3000/badjs?level=1&msg=hello%20world' \
+  -d 3 \
+  -c 50 \
+  -t 8 \
+
+kill $pid

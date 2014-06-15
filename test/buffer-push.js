@@ -17,7 +17,7 @@ describe('BufferPush', function () {
   });
 
   it('should able to reset the buffer', function () {
-    buffer.reset();
+    buffer.length = 0;
     buffer.length.should.equal(0);
     buffer.toString().should.equal('');
   });

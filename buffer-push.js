@@ -14,20 +14,11 @@
   function BufferPush(size) {
     // the actual buffer
     this.buf = new Buffer(size || 1024);
-    // the buffer offset
-    this._offset = 0;
-    Object.defineProperties(this, {
-      // the data length of buffer's storage
-      'length': {
-        get: function () {
-          return this._offset
-        }
-      },
-      // the buffer size
-      'size': {
-        'get': function () {
-          return this.buf.length;
-        }
+    // the data length of buffer's storage
+    this.length = 0;
+    Object.defineProperty(this, 'size', {
+      'get': function () {
+        return this.buf.length;
       }
     });
   }
@@ -39,8 +30,8 @@
   BufferPush.prototype.push = function (string) {
     if (string.length) {
       var l = Buffer.byteLength(string);
-      this.buf.write(string, this._offset, l);
-      this._offset += l;
+      this.buf.write(string, this.length, l);
+      this.length += l;
     }
   }
 
@@ -49,14 +40,7 @@
    * @returns {Stirng}
    */
   BufferPush.prototype.toString = function () {
-    return this.buf.toString('utf8', 0, this._offset);
-  }
-
-  /**
-   * reset
-   */
-  BufferPush.prototype.reset = function () {
-    this._offset = 0;
+    return this.buf.toString('utf8', 0, this.length);
   }
 
   module.exports = BufferPush;
