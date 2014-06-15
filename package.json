@@ -17,5 +17,9 @@
     "axon": "*",
     "user-agent-parser": "*"
   },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
   "license": "MIT"
 }
