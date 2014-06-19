@@ -1,0 +1,19 @@
+var axon = require('axon')
+  , pull = axon.socket('pull')
+  , rep = axon.socket('rep')
+  , BufferPush = require('./buffer-push')
+  // create a push buffer
+  , buffer = new BufferPush(100000);
+
+pull.bind(3001);
+
+pull.on('message', function (msg) {
+  buffer.push(msg);
+});
+
+rep.connect(3002);
+
+rep.on('message', function (reply) {
+  reply(buffer.toString());
+  buffer.length = 0;
+});

@@ -5,17 +5,9 @@ module.exports = function () {
   var connect = require('connect')
     , ua = require('user-agent-parser')
     , axon = require('axon')
-    , rep = axon.socket('rep')
-    , BufferPush = require('./buffer-push')
-    // create a push buffer
-    , buffer = new BufferPush(100000);
+    , push = axon.socket('push');
 
-  rep.connect(9999);
-
-  rep.on('message', function (reply) {
-    reply(buffer.toString());
-    buffer.length = 0;
-  });
+  push.connect(3001);
 
   var app = connect()
               .use('/badjs', connect.query())
@@ -23,7 +15,7 @@ module.exports = function () {
                 // parse user agent
                 // console.log(ua(req.headers['user-agent']));
 
-                buffer.push(+new Date + ' ' + req.query.level + ' ' + req.query.msg + '\n');
+                push.send(+new Date + ' ' + req.query.level + ' ' + req.query.msg + '\n');
 
                 res.writeHead(204, { 'Content-Type': 'image/jpeg' });
                 res.statusCode = 204;
