@@ -7,7 +7,7 @@ module.exports = function () {
     , axon = require('axon')
     , push = axon.socket('push');
 
-  push.connect(3001);
+  push.connect(3001,'localhost');
 
   var app = connect()
               .use('/badjs', connect.query())
@@ -15,7 +15,7 @@ module.exports = function () {
                 // parse user agent
                 // console.log(ua(req.headers['user-agent']));
 
-                push.send(+new Date + ' ' + req.query.level + ' ' + req.query.msg + '\n');
+                push.send( (new Date).toISOString() + ' ' + req.query.level + ' ' + req.query.msg + '\n' );
 
                 res.writeHead(204, { 'Content-Type': 'image/jpeg' });
                 res.statusCode = 204;

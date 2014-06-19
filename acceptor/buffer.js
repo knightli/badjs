@@ -5,13 +5,13 @@ var axon = require('axon')
   // create a push buffer
   , buffer = new BufferPush(100000);
 
-pull.bind(3001);
+pull.bind(3001,'localhost');
 
 pull.on('message', function (msg) {
   buffer.push(msg);
 });
 
-rep.connect(3002);
+rep.connect(3002,'localhost');
 
 rep.on('message', function (reply) {
   reply(buffer.toString());
