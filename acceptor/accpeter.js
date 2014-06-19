@@ -10,7 +10,7 @@ module.exports = function () {
     // create a push buffer
     , buffer = new BufferPush(100000);
 
-  rep.connect(3001);
+  rep.connect(9999);
 
   rep.on('message', function (reply) {
     reply(buffer.toString());

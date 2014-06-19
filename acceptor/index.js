@@ -5,7 +5,7 @@ module.exports = function () {
     , workerMap = {}
     , accpeterNum = 0
     , writerNum = 0
-    , ACCEPTER_NUM = 2;
+    , ACCEPTER_NUM = 1;
 
   if (cluster.isMaster) {
     for (var i = ACCEPTER_NUM ; i--;) {

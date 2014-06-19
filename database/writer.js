@@ -6,7 +6,7 @@ module.exports = function () {
     , axon = require('axon')
     , req = axon.socket('req');
 
-  req.bind(3001);
+  req.bind(9999);
 
   function write() {
     req.send(function (res) {
