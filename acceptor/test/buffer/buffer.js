@@ -1,7 +1,7 @@
 var axon = require('axon')
   , pull = axon.socket('pull')
   , rep = axon.socket('rep')
-  , BufferPush = require('./buffer-push')
+  , BufferPush = require('./buffer-array')
   // create a push buffer
   , buffer = new BufferPush(100000);
 

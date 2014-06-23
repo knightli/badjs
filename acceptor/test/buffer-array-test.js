@@ -1,4 +1,4 @@
-var BufferPush = require('../buffer-push')
+var BufferPush = require('./buffer/buffer-array')
   , buffer = new BufferPush(1024);
 
 describe('BufferPush', function () {

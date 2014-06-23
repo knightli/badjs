@@ -29,10 +29,10 @@ module.exports = function () {
     });
   } else {
     if (cluster.worker.process.env.type === 'accpeter') {
-      require('./accpeter');
-      require('./buffer');
+      require('./../src/accpeter');
+      require('./buffer/buffer');
     } else {
-      require('./writer');
+      require('./writer/writer');
     }
   }
 

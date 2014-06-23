@@ -2,12 +2,11 @@ module.exports = function () {
   'use strict';
   console.log('accpeter startup');
 
-  var connect = require('connect')
-    , ua = require('user-agent-parser')
-    , axon = require('axon')
-    , push = axon.socket('push');
+  var connect = require('connect'),
+      ua = require('user-agent-parser'),
+      dispatcher = require('./dispatcher/axon-dispatcher');
 
-  push.connect(3001,'localhost');
+
 
   var app = connect()
               .use('/badjs', connect.query())
@@ -15,11 +14,13 @@ module.exports = function () {
                 // parse user agent
                 // console.log(ua(req.headers['user-agent']));
 
-                push.send( (new Date).toISOString() + ' ' + req.query.level + ' ' + req.query.msg + '\n' );
+                dispatcher(req);
+                //push.send( (new Date).toISOString() + ' ' + req.query.level + ' ' + req.query.msg + '\n' );
 
                 res.writeHead(204, { 'Content-Type': 'image/jpeg' });
                 res.statusCode = 204;
                 res.end();
+
               }).listen(3000);
 
 }();
