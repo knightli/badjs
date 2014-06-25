@@ -15,7 +15,8 @@
   "dependencies": {
     "connect": "*",
     "axon": "*",
-    "user-agent-parser": "*"
+    "user-agent-parser": "*",
+    "redis": "*"
   },
   "devDependencies": {
     "mocha": "*",
