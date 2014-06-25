@@ -8,6 +8,6 @@ var redis = require("redis"),
 
 module.exports = function (data) {
 
-    client.publish("badjs", JSON.stringify(data));
+    client.publish("badjs ", JSON.stringify(data));
 
 }
