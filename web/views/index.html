@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible"/>
+    <title>badjs</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <h1 class="title">nlog 日志系统</h1>
+    </header>
+    <main class="clearfix">
+        <div class="log-wrap">
+            <div class="real-wrap">
+                <div class="monitor rt-monitor">
+                    <span id="expandRealtime" class="pull-his">[ 展开 ]</span>
+
+                    <h2 id="realTitle">实时记录</h2>
+                    <ol id="realtimeList" style="height: 250px;">
+                    </ol>
+                    <div class="status hide" id="realtimeStatus">
+                        <div id="realtimeStatusInner" class="inner">
+                            <span id="realtimeScanStatus"></span>（共有<span id="realtimeRece" class="red">0</span>条符合条件的记录，只接收了最新的<span id="realtimeSend" class="red">0</span>条。丢弃了<span id="realtimeMiss" class="red">0</span>条<span id="realtimeAdvice" class="hide">，建议您添加关键词</span>）
+                        </div>
+                    </div>
+                    <div id="realtimeBottom" class="mnt-btm">
+                        <button id="btnShowRealtime" type="button" class="btn bold">显示实时记录</button>
+                        <button id="btnStopRealtime" type="button" class="btn">暂停</button>
+                        <button id="btnClearRealtime" type="button" class="btn">清屏</button>
+                        <button id="btnClipRealtime" type="button" class="btn">复制到剪切板</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-wrap">
+                <div id="hisMonitor" class="monitor his-monitor">
+                    <span id="expandHistory" class="pull-real">[ 展开 ]</span>
+
+                    <h2 id="historyTitle">历史记录</h2>
+                    <ul id="historyList" style="height: 250px;">
+                    </ul>
+                    <div class="status hide" id="historyStatus">
+                        <div id="historyStatusInner" class="inner">
+                            第<span id="fileNo" class="red">0</span>/<span id="fileCount" class="red">0</span>个文件，当前文件已扫描
+                            <span id="percentage" class="red">0</span>%<span id="historyScanStatus"></span></div>
+                    </div>
+                    <div id="historyBottom" class="mnt-btm" style="display: block;">
+                        <button id="btnShowHistory" type="button" class="btn bold">显示历史记录</button>
+                        <button id="btnPauseHistory" type="button" class="btn" disabled="">暂停</button>
+                        <button id="btnLastPage" type="button" class="btn" disabled="">上一页</button>
+                        <button id="btnNextPage" type="button" class="btn" disabled="">下一页</button>
+                        <button id="btnClipHistory" type="button" class="btn">复制到剪切板</button>
+                        <a id="enterAdcanced" style="line-height:26px;position: absolute; right:0; color: #888; cursor: pointer; margin: 0 1em;">高级</a>
+                    </div>
+                    <div id="hisAdvanced" class="advanced hide">
+                        <span id="closeAdvanced" class="close">[ x ]</span>
+
+                        <h2>自定义数据下载</h2>
+                        <style type="text/css">
+                            #hisAdvanced input[type=text] { width: 50px; margin-left: 3px; margin-right: 3px; }
+                        </style>
+                        <ol id="pairs" class="advanced-form">
+                            <li class="form-row">
+                                <label>前分隔符<input class="begin" type="text"></label> <label>后分隔符<input class="end" type="text"></label>
+                            </li>
+                            <li style="text-align: right;">
+                                <button id="deletePair" style="margin-right:5px;">删除</button>
+                                <button id="addPair" style="margin-right:30px;">添加</button>
+                            </li>
+                        </ol>
+                        <div class="mnt-btm">
+                            <button id="btnDownloadPairs">下载</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-wrap ">
+
+        <div id="argsBox" class="args-form container">
+        <span class="hide-args" id="hideArgs">隐藏</span>
+
+        <h2>设置查询参数(申请权限请找capewu,techieliu)</h2>
+
+        <div class="form-app-group">
+            <div class="form-row">
+                <label class="row-name">环境：</label>
+                <select name="Machine" id="machine" tabindex="1" class="w150" autocomplete="off"><option value="0">运营机</option><option value="1" selected="selected">开发机</option></select>
+            </div>
+            <div class="form-row">
+                <label class="row-name">业务名称：</label>
+                <select name="AppName" id="appName" tabindex="2" class="w150" autocomplete="off"><option value="88" selected="selected">群管理_认领</option><option value="211">新版资料卡</option></select>
+            </div>
+            <div id="moduleIdRow" class="form-row">
+                <label class="row-name" for="moduleId">模块：</label>
+                <input type="checkbox" id="chkSelectAllModules" checked="checked"><label class="for" for="chkSelectAllModules">全选</label>
+                <span class="module-span"><input name="ModuleId" type="checkbox" id="module0" value="1" title="所有"><label class="for" for="module0" title="所有">[1]所有</label></span><span class="module-span"><input name="ModuleId" type="checkbox" id="module1" value="11" title="群创建"><label class="for" for="module1" title="群创建">[11]群创建</label></span><span class="module-span"><input name="ModuleId" type="checkbox" id="module2" value="14" title="群资料卡"><label class="for" for="module2" title="群资料卡">[14]群资料卡</label></span><span class="module-span"><input name="ModuleId" type="checkbox" id="module3" value="15" title="群查找"><label class="for" for="module3" title="群查找">[15]群查找</label></span><span class="module-span"><input name="ModuleId" type="checkbox" id="module4" value="100" title="100"><label class="for" for="module4" title="100">100</label></span><span class="module-span"><input name="ModuleId" type="checkbox" id="module5" value="101" title="101"><label class="for" for="module5" title="101">101</label></span><span class="module-span"><input name="ModuleId" type="checkbox" id="module6" value="30001" title="30001"><label class="for" for="module6" title="30001">30001</label></span></div>
+            <div id="logLevelRow" class="form-row">
+                <label class="row-name">信息类型：</label>
+                <input type="checkbox" id="chkSelectAllLevels" checked="checked"><label class="for" for="chkSelectAllLevels">全选</label>
+            <span class="level-span">
+                        <input id="level1" type="checkbox" title="info" value="1" name="LogLevel">
+                        <label class="for" title="程序员专用日志" for="level1">调试</label>
+                    </span>
+                    <span class="level-span">
+                        <input checked="checked" id="level2" type="checkbox" title="info" value="2" name="LogLevel"><label class="for" title="记录业务逻辑" for="level2">信息</label>
+                    </span>
+                    <span class="level-span">
+                        <input checked="checked" id="level4" type="checkbox" title="info" value="4" name="LogLevel"><label class="for" title="记录错误" for="level4">错误</label>
+                    </span>
+                    <span class="level-span">
+                        <input id="level8" type="checkbox" title="info" value="8" name="LogLevel"><label class="for" title="记录失败" for="level8">失败</label>
+                    </span>
+            </div>
+            <div class="form-row">
+                <button id="btnShowRealtime2" type="button" class="btn bold shotcut">显示实时记录</button>
+            </div>
+        </div>
+        <div id="dateGroup" class="form-date-group">
+            <div class="form-row">
+                <label class="row-name">起始日期：</label>
+                <input type="text" id="startDate" class="w100 time-control-key">
+
+                <div id="startDatePicker" class="date-plugin time-control-mouse"><div class="frk-cal-wrap" style="visibility: hidden;"><div class="heading frk-cal-part"><button>&lt;&lt;</button><button>&lt;</button><span class="title">2014.7</span><button>&gt;</button><button>&gt;&gt;</button><button>X</button></div><ol class="what-day frk-clearfix frk-cal-part"><li>日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li>六</li></ol><ol class="calendar frk-clearfix frk-cal-part"><li class="date-prev">29</li><li class="date-prev">30</li><li class="date-now">1</li><li class="date-now">2</li><li class="date-now">3</li><li class="date-now">4</li><li class="date-now">5</li><li class="date-now">6</li><li class="date-hl">7</li><li class="date-now">8</li><li class="date-now">9</li><li class="date-now">10</li><li class="date-now">11</li><li class="date-now">12</li><li class="date-now">13</li><li class="date-now">14</li><li class="date-now">15</li><li class="date-now">16</li><li class="date-now">17</li><li class="date-now">18</li><li class="date-now">19</li><li class="date-now">20</li><li class="date-now">21</li><li class="date-now">22</li><li class="date-now">23</li><li class="date-now">24</li><li class="date-now">25</li><li class="date-now">26</li><li class="date-now">27</li><li class="date-now">28</li><li class="date-now">29</li><li class="date-now">30</li><li class="date-now">31</li><li class="date-next">1</li><li class="date-next">2</li><li class="date-next">3</li><li class="date-next">4</li><li class="date-next">5</li><li class="date-next">6</li><li class="date-next">7</li><li class="date-next">8</li><li class="date-next">9</li></ol><div class="frk-cal-part">请点击数字选择日期</div></div></div>
+                <select id="startHour" class="w50 time-control-change" autocomplete="off">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                </select><span>时</span>
+                <select id="startMinute" class="w50 time-control-change" autocomplete="off">
+                    <option value="1">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="36">36</option>
+                    <option value="37">37</option>
+                    <option value="38">38</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                </select><span>分</span>
+            </div>
+            <div class="form-row">
+                <label class="row-name">结束日期：</label>
+                <input type="text" id="stopDate" class="w100 select-fix time-control-key">
+
+                <div id="stopDatePicker" class="date-plugin select-fix time-control-mouse"><div class="frk-cal-wrap" style="visibility: hidden;"><div class="heading frk-cal-part"><button>&lt;&lt;</button><button>&lt;</button><span class="title">2014.7</span><button>&gt;</button><button>&gt;&gt;</button><button>X</button></div><ol class="what-day frk-clearfix frk-cal-part"><li>日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li>六</li></ol><ol class="calendar frk-clearfix frk-cal-part"><li class="date-prev">29</li><li class="date-prev">30</li><li class="date-now">1</li><li class="date-now">2</li><li class="date-now">3</li><li class="date-now">4</li><li class="date-now">5</li><li class="date-now">6</li><li class="date-hl">7</li><li class="date-now">8</li><li class="date-now">9</li><li class="date-now">10</li><li class="date-now">11</li><li class="date-now">12</li><li class="date-now">13</li><li class="date-now">14</li><li class="date-now">15</li><li class="date-now">16</li><li class="date-now">17</li><li class="date-now">18</li><li class="date-now">19</li><li class="date-now">20</li><li class="date-now">21</li><li class="date-now">22</li><li class="date-now">23</li><li class="date-now">24</li><li class="date-now">25</li><li class="date-now">26</li><li class="date-now">27</li><li class="date-now">28</li><li class="date-now">29</li><li class="date-now">30</li><li class="date-now">31</li><li class="date-next">1</li><li class="date-next">2</li><li class="date-next">3</li><li class="date-next">4</li><li class="date-next">5</li><li class="date-next">6</li><li class="date-next">7</li><li class="date-next">8</li><li class="date-next">9</li></ol><div class="frk-cal-part">请点击数字选择日期</div></div></div>
+                <select id="stopHour" class="w50 select-fix time-control-change" autocomplete="off">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                </select><span class="select-fix">时</span>
+                <select id="stopMinute" class="w50 time-control-change" autocomplete="off">
+                    <option value="1">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="36">36</option>
+                    <option value="37">37</option>
+                    <option value="38">38</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                </select><span>分</span>
+            </div>
+            <div class="form-row">
+                <button id="btnShowHistory2" type="button" class="btn bold shotcut">显示历史记录</button>
+            </div>
+        </div>
+
+        <div id="keyGroup" class="form-keys-group">
+            <div class="form-row">
+                <label class="row-name" for="include">包含关键词：</label>
+                <input type="text" id="include" class="w150  select-fix">
+                <button id="addIncludeBtn" type="button" class="btn select-fix">添加</button>
+                <button id="clearIncludeBtn" type="button" class="btn">清空</button>
+            </div>
+            <div id="keywordsIncluded" class="keywords-wrap form-row select-fix">
+            </div>
+            <div class="form-row">
+                <label class="row-name" for="except">排除关键词：</label>
+                <input type="text" id="except" class="w150  select-fix">
+                <button id="addExceptBtn" type="button" class="btn select-fix">添加</button>
+                <button id="clearExceptBtn" type="button" class="btn">清空</button>
+            </div>
+            <div id="keywordsExcepted" class="keywords-wrap form-row select-fix"></div>
+            <div class="form-row">
+                <label class="row-name" for="except">正则统计：</label>
+                <input type="text" id="statistics" class="w150  select-fix" value="Succ! time=([\d\.]+) ms">
+                <button id="statisticsBtn" type="button" class="btn select-fix">统计</button>
+            </div>
+
+        </div>
+
+        <div id="urlGroup" class="form-url-group">
+            <div class="form-row">
+                <label class="row-name" for="url">Nlog URL:</label>
+
+                <button id="btnClipURL" type="button" class="btn">复制到剪切板</button>
+            </div>
+            <div class="form-row url-area">
+                <textarea id="urlArea" disabled="disabled">http://nlog.server.com/index.html?appid=88&amp;machine=1&amp;moduleids=1_11_14_15_100_101_30001&amp;levels=1_2_4_8&amp;startdate=2014-07-06-17-1&amp;enddate=2014-07-07-17-5</textarea>
+            </div>
+        </div>
+
+        </div>
+
+        </div>
+    </main>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+<script>
+
+</script>
+</body>
+</html>

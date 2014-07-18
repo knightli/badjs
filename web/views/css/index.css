@@ -1,0 +1,26 @@
+.wrap {
+    width : 1200px;
+    margin: 0 auto;
+}
+
+.log-wrap {
+    width : 750px;
+    float:left;
+    border: 1px solid #dcdcdc;
+    margin-right:20px;
+}
+
+.filter-wrap {
+    width:420px;
+    float:left;
+    border: 1px solid #dcdcdc;
+}
+
+.clearfix:after {
+    content : ' ';
+    height: 1px;
+    width:1px;
+    display : block;
+    clear:both;
+    visibility : hidden;
+}
